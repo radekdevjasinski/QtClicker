@@ -295,8 +295,8 @@ public:
 void QtClicker::update() 
 {
     money.cash = 1;
+    game.CheckWorkDone();
 }
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
