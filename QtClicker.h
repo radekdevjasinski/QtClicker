@@ -11,10 +11,10 @@ class QtClicker : public QMainWindow
 public:
     QtClicker(QWidget *parent = nullptr);
     ~QtClicker();
-private:
     Ui::QtClickerClass ui;
     QTimer timer;
 private slots:
     void update();
+    void init();
     void on_pushButton_clicked();
 };

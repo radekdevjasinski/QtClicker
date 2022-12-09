@@ -296,6 +296,13 @@ void QtClicker::update()
 {
     money.cash = 1;
     game.CheckWorkDone();
+    ui.groupBox->setTitle(QString::fromStdString("siema 1/20"));
+}
+void QtClicker::init()
+{
+    money.cash = 1;
+    game.CheckWorkDone();
+    ui.groupBox->setTitle(QString::fromStdString("siema 1/20"));
 }
 int main(int argc, char *argv[])
 {
