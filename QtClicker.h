@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QTimer>
 #include "ui_QtClicker.h"
 
 class QtClicker : public QMainWindow
@@ -12,6 +13,8 @@ public:
     ~QtClicker();
 private:
     Ui::QtClickerClass ui;
+    QTimer timer;
 private slots:
-
+    void update();
+    void on_pushButton_clicked();
 };
