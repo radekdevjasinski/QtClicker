@@ -298,7 +298,41 @@ void QtClicker::update()
 }
 void QtClicker::init()
 {
-
+    int i = 1;
+    for (game.it = game.jobs.begin(); game.it != game.jobs.end(); ++game.it)
+    {
+        switch (i)
+        {
+        case 1:
+            ui.groupBox->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        case 2:
+            ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        case 3:
+            ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        case 4:
+            ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        case 5:
+            ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        case 6:
+            ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        case 7:
+            ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        case 8:
+            ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            break;
+        default:
+            break;
+        }
+        i++;
+    }
+    ui.label_2->setText(QString::fromStdString("Cash: " + to_string(money.cash) + " GPU's"));
 }
 int main(int argc, char *argv[])
 {
