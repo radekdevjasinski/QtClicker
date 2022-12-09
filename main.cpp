@@ -237,35 +237,27 @@ public:
             money.MoneyAdd(100000);
             cout << "\nCheated\n" << endl;
         }
-        else if (code.substr(0, 3) == "buy")
-        {
-            char index = code.back();
-            int number = index - '1';
-            int i = 0;
-            for (it = jobs.begin(); it != jobs.end(); ++it)
-            {
-                if (i == number)
-                {
-                    if (money.cash >= it->price && it->level + 1 <= it->maxLevel)
-                    {
-                        if (it->level == -1)
-                        {
-                            it->startTime = time(NULL);
-                        }
-                        money.cash -= roundToInt(it->price);
-                        it->level++;
-                        it->LevelUp();
-                        cout << "\nYou just bought " << number + 1 << " business!\n" << endl;
-                    }
-                }
-                i++;
-            }
-
-        }
     }
-    void ClearScreen()
+    void Buy(int number)
     {
-        cout << string(100, '\n');
+        int i = 0;
+        for (it = jobs.begin(); it != jobs.end(); ++it)
+        {
+            if (i == number)
+            {
+                if (money.cash >= it->price && it->level + 1 <= it->maxLevel)
+                {
+                    if (it->level == -1)
+                    {
+                        it->startTime = time(NULL);
+                    }
+                    money.cash -= roundToInt(it->price);
+                    it->level++;
+                    it->LevelUp();
+                }
+            }
+            i++;
+        }
     }
     void CheckWorkDone()
     {
@@ -305,34 +297,42 @@ void QtClicker::init()
         {
         case 1:
             ui.groupBox->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar->setValue(game.it->timeToShow);
             break;
         case 2:
             ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar_2->setValue(game.it->timeToShow);
             break;
         case 3:
             ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar_3->setValue(game.it->timeToShow);
             break;
         case 4:
             ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar_4->setValue(game.it->timeToShow);
             break;
         case 5:
             ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar_5->setValue(game.it->timeToShow);
             break;
         case 6:
             ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar_6->setValue(game.it->timeToShow);
             break;
         case 7:
             ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar_7->setValue(game.it->timeToShow);
             break;
         case 8:
             ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            ui.progressBar_8->setValue(game.it->timeToShow);
             break;
         default:
             break;
         }
         i++;
     }
-    ui.label_2->setText(QString::fromStdString("Cash: " + to_string(money.cash) + " GPU's"));
+    ui.label_2->setText(QString::fromStdString("Cash: " + WriteComma(money.cash) + " GPU's"));
 }
 int main(int argc, char *argv[])
 {
