@@ -4,7 +4,7 @@ using namespace std;
 QtClicker::QtClicker(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
-    timer.setInterval(1000);
+    timer.setInterval(100);
     timer.start();
     connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
     init();
@@ -13,7 +13,3 @@ QtClicker::QtClicker(QWidget *parent) : QMainWindow(parent)
 }
 QtClicker::~QtClicker()
 {}
-void QtClicker::on_pushButton_clicked()
-{
-    //
-}

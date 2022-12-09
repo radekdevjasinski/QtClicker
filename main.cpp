@@ -14,31 +14,6 @@ int roundToInt(float value)
 {
     return (int)(value + 0.5);
 }
-string WriteComma(int tempmoney) {
-    int num = tempmoney;
-    int count = 0, d = 1;
-    string str = "";
-    if (num == 0)
-    {
-        str = "0";
-        return str;
-    }
-    while (tempmoney) {
-        tempmoney /= 10;
-        count++;
-        if (tempmoney) d *= 10;
-    }
-    tempmoney = num;
-
-    while (num) {
-        if (count-- % 3 == 0 and tempmoney != num) str += ",";
-
-        str += to_string(num / d);
-        num %= d;
-        d /= 10;
-    }
-    return str;
-}
 string MoneyString(int money)
 {
     string oldMoney = to_string(money);
@@ -240,7 +215,7 @@ public:
     }
     void Buy(int number)
     {
-        int i = 0;
+        int i = 1;
         for (it = jobs.begin(); it != jobs.end(); ++it)
         {
             if (i == number)
@@ -286,13 +261,13 @@ public:
 //}
 void QtClicker::update()
 {
-    title();
     game.CheckWorkDone();
+    title();
 }
 void QtClicker::init()
 {
     title();
-    ui.label_2->setText(QString::fromStdString("Cash: " + WriteComma(money.cash) + " GPU's"));
+    
 }
 void QtClicker::title()
 {
@@ -302,50 +277,107 @@ void QtClicker::title()
         switch (i)
         {
         case 1:
-            if (game.it->level <= 0) ui.groupBox->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar->setValue(game.it->timeToShow);
+            ui.progressBar->setValue(game.it->timeToShow*100);
+            ui.pushButton->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_4->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_3->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         case 2:
-            if (game.it->level <= 0) ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar_2->setValue(game.it->timeToShow);
+            ui.progressBar_2->setValue(game.it->timeToShow * 100);
+            ui.pushButton_3->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_6->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_5->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         case 3:
-            if (game.it->level <= 0) ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar_3->setValue(game.it->timeToShow);
+            ui.progressBar_3->setValue(game.it->timeToShow * 100);
+            ui.pushButton_5->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_8->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_7->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         case 4:
-            if (game.it->level <= 0) ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar_4->setValue(game.it->timeToShow);
+            ui.progressBar_4->setValue(game.it->timeToShow * 100);
+            ui.pushButton_7->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_10->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_9->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         case 5:
-            if (game.it->level <= 0) ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar_5->setValue(game.it->timeToShow);
+            ui.progressBar_5->setValue(game.it->timeToShow * 100);
+            ui.pushButton_9->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_12->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_11->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         case 6:
-            if (game.it->level <= 0) ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar_6->setValue(game.it->timeToShow);
+            ui.progressBar_6->setValue(game.it->timeToShow * 100);
+            ui.pushButton_11->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_14->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_13->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         case 7:
-            if (game.it->level <= 0) ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar_7->setValue(game.it->timeToShow);
+            ui.progressBar_7->setValue(game.it->timeToShow * 100);
+            ui.pushButton_13->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_16->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_15->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         case 8:
-            if (game.it->level <= 0) ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            if (game.it->level < 0) ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar_8->setValue(game.it->timeToShow);
+            ui.progressBar_8->setValue(game.it->timeToShow * 100);
+            ui.pushButton_15->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.label_18->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
+            ui.label_17->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
             break;
         default:
             break;
         }
         i++;
     }
+    ui.label_2->setText(QString::fromStdString("Cash: " + MoneyString(money.cash) + " GPU's"));
+}
+void QtClicker::on_pushButton_clicked()
+{
+    game.Buy(1);
+}
+void QtClicker::on_pushButton_3_clicked()
+{
+    game.Buy(2);
+}
+void QtClicker::on_pushButton_5_clicked()
+{
+    game.Buy(3);
+}
+void QtClicker::on_pushButton_7_clicked()
+{
+    game.Buy(4);
+}
+void QtClicker::on_pushButton_9_clicked()
+{
+    game.Buy(5);
+}
+void QtClicker::on_pushButton_11_clicked()
+{
+    game.Buy(6);
+}
+void QtClicker::on_pushButton_13_clicked()
+{
+    game.Buy(7);
+}
+void QtClicker::on_pushButton_15_clicked()
+{
+    game.Buy(8);
 }
 int main(int argc, char *argv[])
 {
