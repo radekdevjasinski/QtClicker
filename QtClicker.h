@@ -16,5 +16,6 @@ public:
 private slots:
     void update();
     void init();
+    void title();
     void on_pushButton_clicked();
 };

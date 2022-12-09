@@ -284,11 +284,17 @@ public:
 //    return 0;
 //
 //}
-void QtClicker::update() 
+void QtClicker::update()
 {
+    title();
     game.CheckWorkDone();
 }
 void QtClicker::init()
+{
+    title();
+    ui.label_2->setText(QString::fromStdString("Cash: " + WriteComma(money.cash) + " GPU's"));
+}
+void QtClicker::title()
 {
     int i = 1;
     for (game.it = game.jobs.begin(); game.it != game.jobs.end(); ++game.it)
@@ -296,35 +302,43 @@ void QtClicker::init()
         switch (i)
         {
         case 1:
-            ui.groupBox->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar->setValue(game.it->timeToShow);
             break;
         case 2:
-            ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_2->setValue(game.it->timeToShow);
             break;
         case 3:
-            ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_3->setValue(game.it->timeToShow);
             break;
         case 4:
-            ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_4->setValue(game.it->timeToShow);
             break;
         case 5:
-            ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_5->setValue(game.it->timeToShow);
             break;
         case 6:
-            ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_6->setValue(game.it->timeToShow);
             break;
         case 7:
-            ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_7->setValue(game.it->timeToShow);
             break;
         case 8:
-            ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
+            if (game.it->level <= 0) ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " Locked"));
+            else ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_8->setValue(game.it->timeToShow);
             break;
         default:
@@ -332,7 +346,6 @@ void QtClicker::init()
         }
         i++;
     }
-    ui.label_2->setText(QString::fromStdString("Cash: " + WriteComma(money.cash) + " GPU's"));
 }
 int main(int argc, char *argv[])
 {
