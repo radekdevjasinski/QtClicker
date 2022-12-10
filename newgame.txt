@@ -1,0 +1,25 @@
+5
+Dropshiping
+-1
+0
+Webmaster
+-1
+0
+Computer technical support
+-1
+0
+Service assistant
+-1
+0
+Master programmer
+-1
+0
+Unity designer
+-1
+0
+Bitcoin trader
+-1
+0
+Owner of twitter
+-1
+0

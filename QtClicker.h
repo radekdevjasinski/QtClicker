@@ -16,7 +16,7 @@ public:
 private slots:
     void update();
     void init();
-    void title();
+    void showUI();
     void on_pushButton_clicked();
     void on_pushButton_3_clicked();
     void on_pushButton_5_clicked();
@@ -25,4 +25,5 @@ private slots:
     void on_pushButton_11_clicked();
     void on_pushButton_13_clicked();
     void on_pushButton_15_clicked();
+    void on_pushButton_17_clicked();
 };

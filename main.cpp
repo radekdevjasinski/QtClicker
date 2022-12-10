@@ -9,6 +9,7 @@
 #include<list>
 #include<string>
 #include<limits>
+#include <fstream>
 using namespace std;
 int roundToInt(float value)
 {
@@ -101,7 +102,14 @@ public:
                 money.MoneyAdd(roundToInt(reward) * CirclesDoneInt);
                 startTime = currentTime - secondsSpare;
             }
-            timeToShow = (float)(CirclesDoneFloat / roundToInt(seconds));
+            if (seconds < 1.5)
+            {
+                timeToShow = 1;
+            }
+            else
+            {
+                timeToShow = (float)(CirclesDoneFloat / roundToInt(seconds));
+            }
         }
 
     }
@@ -124,6 +132,11 @@ public:
     Job j6 = Job("Unity designer", "Robisz podrobki gier, tyko gorzej", 2000, 500, 75, 6000, 3000, 55);
     Job j7 = Job("Bitcoin trader", "Kopiesz bitcoina na starym laptopie babci", 10000, 1000, 90, 60000, 25000, 75);
     Job j8 = Job("Owner of twitter", "Przywracasz wolnosc slowa", 100000, 10000, 120, 500000, 300000, 90);
+
+    bool reset;
+    string save;
+    string newGame;
+
     Game() {
         jobs.push_back(j1);
         jobs.push_back(j2);
@@ -133,6 +146,11 @@ public:
         jobs.push_back(j6);
         jobs.push_back(j7);
         jobs.push_back(j8);
+
+        reset = false;
+
+        save = "savegame.txt";
+        newGame = "newgame.txt";
     }
     string LoadingBar(float time) {
         string loading = "----------", hasz = "";
@@ -241,35 +259,63 @@ public:
             it->CheckWorkDone();
         }
     }
-}game;
+    void SaveToFile() 
+    {
+        ofstream myfile;
+        myfile.open("savegame.txt");
+        myfile << money.cash << endl;
+        for (it = jobs.begin(); it != jobs.end(); ++it)
+        {
+            myfile << it->name << endl;
+            myfile << it->level << endl;
+            myfile << it->startTime << endl;
+        }
+        myfile.close();
+    }
+    void ReadFromFile(string file)
+    {
+        for (it = jobs.begin(); it != jobs.end(); ++it)
+        {
+            it->timeToShow = 0;
+            it->level = 0;
+            it->LevelUp();
+        }
+        ifstream myfile;
+        string buffor;
+        myfile.open(file);
+        if (getline(myfile, buffor))
+            money.cash = stoi(buffor);
+        for (it = jobs.begin(); it != jobs.end(); ++it)
+        {
+            if (getline(myfile, buffor))
+                it->name = buffor;
+            if (getline(myfile, buffor))
+                it->level = stoi(buffor);
+            if (getline(myfile, buffor))
+                it->startTime = stoi(buffor);
+            if (it->level >= 0)
+            {
+                it->LevelUp();
+            }   
 
-//int main() {
-//    string command;
-//    for (;;) {
-//        game.Menu();
-//        do {
-//            cout << "To buy/upgrade a business type: buy (number of business)" << endl;
-//            cout << "or \nPress ENTER to reload" << endl;
-//            getline(cin, command);
-//            game.Commands(command);
-//        } while (command.length() != 0);
-//        game.ClearScreen();
-//        game.CheckWorkDone();
-//    }
-//    return 0;
-//
-//}
+        }
+        myfile.close();
+    }
+}game;
 void QtClicker::update()
 {
     game.CheckWorkDone();
-    title();
+    showUI();
+    game.SaveToFile();
+    
 }
 void QtClicker::init()
 {
-    title();
-    
+    showUI();
+    game.ReadFromFile(game.save);
+
 }
-void QtClicker::title()
+void QtClicker::showUI()
 {
     int i = 1;
     for (game.it = game.jobs.begin(); game.it != game.jobs.end(); ++game.it)
@@ -279,66 +325,90 @@ void QtClicker::title()
         case 1:
             if (game.it->level < 0) ui.groupBox->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
-            ui.progressBar->setValue(game.it->timeToShow*100);
-            ui.pushButton->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            ui.progressBar->setValue(game.it->timeToShow * 100);
+            if (game.it->level < game.it->maxLevel) ui.pushButton->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_4->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_3->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton->setStyleSheet("background-color: #16a538 ; color: black;");
+            else ui.pushButton->setStyleSheet("color: black;");
             break;
         case 2:
             if (game.it->level < 0) ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_2->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_2->setValue(game.it->timeToShow * 100);
-            ui.pushButton_3->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            if (game.it->level < game.it->maxLevel) ui.pushButton_3->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton_3->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_6->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_5->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton_3->setStyleSheet("background-color: #16a538; color: black;");
+            else ui.pushButton_3->setStyleSheet("color: black;");
             break;
         case 3:
             if (game.it->level < 0) ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_3->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_3->setValue(game.it->timeToShow * 100);
-            ui.pushButton_5->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            if (game.it->level < game.it->maxLevel) ui.pushButton_5->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton_5->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_8->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_7->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton_5->setStyleSheet("background-color: #16a538; color: black;");
+            else ui.pushButton_5->setStyleSheet("color: black;");
             break;
         case 4:
             if (game.it->level < 0) ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_4->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_4->setValue(game.it->timeToShow * 100);
-            ui.pushButton_7->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            if (game.it->level < game.it->maxLevel) ui.pushButton_7->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton_7->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_10->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_9->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton_7->setStyleSheet("background-color: #16a538; color: black;");
+            else ui.pushButton_7->setStyleSheet("color: black;");
             break;
         case 5:
             if (game.it->level < 0) ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_5->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_5->setValue(game.it->timeToShow * 100);
-            ui.pushButton_9->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            if (game.it->level < game.it->maxLevel) ui.pushButton_9->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton_9->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_12->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_11->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton_9->setStyleSheet("background-color: #16a538; color: black;");
+            else ui.pushButton_9->setStyleSheet("color: black;");
             break;
         case 6:
             if (game.it->level < 0) ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_6->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_6->setValue(game.it->timeToShow * 100);
-            ui.pushButton_11->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            if (game.it->level < game.it->maxLevel) ui.pushButton_11->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton_11->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_14->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_13->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton_11->setStyleSheet("background-color: #16a538; color: black;");
+            else ui.pushButton_11->setStyleSheet("color: black;");
             break;
         case 7:
             if (game.it->level < 0) ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_7->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_7->setValue(game.it->timeToShow * 100);
-            ui.pushButton_13->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            if (game.it->level < game.it->maxLevel) ui.pushButton_13->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton_13->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_16->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_15->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton_13->setStyleSheet("background-color: #16a538; color: black;");
+            else ui.pushButton_13->setStyleSheet("color: black;");
             break;
         case 8:
             if (game.it->level < 0) ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " Locked"));
             else ui.groupBox_8->setTitle(QString::fromStdString(game.it->name + " " + to_string(game.it->level) + "/" + to_string(game.it->maxLevel)));
             ui.progressBar_8->setValue(game.it->timeToShow * 100);
-            ui.pushButton_15->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            if (game.it->level < game.it->maxLevel) ui.pushButton_15->setText(QString::fromStdString("Buy for " + (MoneyString(roundToInt(game.it->price)))));
+            else ui.pushButton_15->setText(QString::fromStdString("MAX LEVEL"));
             ui.label_18->setText(QString::fromStdString("Reward " + (MoneyString(roundToInt(game.it->reward)))));
             ui.label_17->setText(QString::fromStdString(MoneyString(roundToInt(game.it->seconds)) + "s"));
+            if (game.it->price <= money.cash && game.it->level != game.it->maxLevel) ui.pushButton_15->setStyleSheet("background-color: #16a538; color: black;");
+            else ui.pushButton_15->setStyleSheet("color: black;");
             break;
         default:
             break;
@@ -379,7 +449,21 @@ void QtClicker::on_pushButton_15_clicked()
 {
     game.Buy(8);
 }
-int main(int argc, char *argv[])
+void QtClicker::on_pushButton_17_clicked()
+{
+    if (!game.reset)
+    {
+        game.reset = true;
+        ui.pushButton_17->setStyleSheet("background-color: red; color: white;");
+    }
+    else
+    {
+        ui.pushButton_17->setStyleSheet("color: black;");
+        game.reset = false;
+        game.ReadFromFile(game.newGame);
+    }
+}
+int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     QtClicker w;
